@@ -1,0 +1,58 @@
+#!/bin/bash
+
+BACKTITLE="Vserver Creator"
+VPSHOME=/home/vserver/
+VPSPACKAGES=/home/bahan/
+
+
+
+conf_vm(){
+   mkdir /tmp/vserver/
+   dialog --title "Vserver Name  Setting" --backtitle "$BACKTITLE" \
+   --inputbox "Name for Virtual Server :" 10 51 2> /tmp/vserver/name
+
+   dialog --clear --title "Vserver  Context Setting" --backtitle "$BACKTITLE" \
+   --inputbox "context for Virtual Server :" 10 51 2> /tmp/vserver/context
+
+   dialog --clear --title "Vserver  IP Setting" --backtitle "$BACKTITLE" \
+   --inputbox "IP Address for Virtual Server :" 10 51 2> /tmp/vserver/ip
+   
+   
+}
+
+create_vm(){
+echo "Create a Virtual Server with name $1"
+    vserver  $1 build -m skeleton --context $2 --interface dummy0:$3 --flags lock,virt_mem,virt_uptime,virt_cpu,virt_load,sched_hard,hide_netif --initstyle sysv
+    for a in $(ls $VPSPACKAGES); do
+       installpkg -root $VPSHOME/$1 $VPSPACKAGES/$a
+    done
+   
+    cp /etc/resolv.conf $VPSHOME/$1/etc/
+    cp /etc/localtime $VPSHOME/$1/etc/
+    echo /dev/hdv1 / ext2 defaults 1 1 > $VPSHOME/$1/etc/fstab                                                           
+    echo /dev/hdv1 / ext2 rw 0 0 > $VPSHOME/$1/etc/mtab
+    chroot $VPSHOME/$1/ ldconfig
+    echo -e "
+         #!/bin/bash
+            if [ "\$1\" == "3" ]; then
+              /etc/rc.d/rc.M
+            elif [ "\$1\" == "6" ]; then
+              /etc/rc.d/rc.6
+            else
+              echo "Invalid level."
+              exit 1
+            fi" >> $VPSHOME/$1/etc/init.d/rc
+     chmod +x $VPSHOME/$1/etc/init.d/rc     
+    echo "$1 has been created"
+}
+
+
+dialog --title "Welcome" --backtitle "$BACKTITLE" --yesno  "This tools will help you to create a VPS based on Vserver. Do you want continue ?" 6 90
+hah=$?
+   if [ $hah = "0" ]; then 
+     conf_vm
+     name=$(cat /tmp/vserver/name)
+     context=$(cat /tmp/vserver/context)
+     ip=$(cat /tmp/vserver/ip)   
+     create_vm $name $context $ip
+   fi
