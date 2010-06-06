@@ -1,2 +1,2 @@
 #!/bin/bash
-/usr/local/sbin/vserver  $1 build -m skeleton --context $2 --interface dummy0:$3 --flags lock,virt_mem,virt_uptime,virt_cpu,virt_load,sched_hard,hide_netif --initstyle sysv 
+/usr/local/sbin/vserver  $1 build -m skeleton  --interface dummy0:$2 --flags lock,virt_mem,virt_uptime,virt_cpu,virt_load,sched_hard,hide_netif --initstyle sysv 
