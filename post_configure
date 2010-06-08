@@ -1,3 +1,6 @@
+
+ sed -e s/"#UseDNS yes"/"UseDNS no"/ $2/etc/ssh/sshd_config >> $2/etc/ssh/sshd_buf
+ mv $2/etc/ssh/sshd_buf $2/etc/ssh/sshd_config
 /usr/bin/echo "ListenAddress $1" >> $2/etc/ssh/sshd_config
 /usr/bin/mkdir $4/rlimits/
 /usr/bin/echo $3 > $4/rlimits/rss.hard

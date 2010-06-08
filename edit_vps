@@ -1,0 +1,12 @@
+#!/bin/bash
+VHOME="/home/vserver"
+VDIR="/usr/local/"
+
+if [ "$1" = "1" ]; then
+    echo "$2" >  $VDIR/etc/vservers/$3/rlimits/rss.hard    
+
+elif [ "$1" = "2" ]; then 
+   echo "$2" >  $VDIR/etc/vservers/$4/interfaces/0/ip
+   sed -e s/"ListenAddress $3"/"ListenAddress $2"/ $VHOME/$4/etc/ssh/sshd_config >> $VHOME/$4/etc/ssh/sshd_buf
+   mv $VHOME/$4/etc/ssh/sshd_buf $VHOME/$4/etc/ssh/sshd_config 
+  fi
