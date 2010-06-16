@@ -39,3 +39,6 @@ apache darkstar=NOPASSWD: /usr/local/etc/script/post_configure
 apache darkstar=NOPASSWD: /usr/bin/mkdir
 apache darkstar=NOPASSWD: /usr/bin/echo
 apache darkstar=NOPASSWD: /usr/local/sbin/vserver-stat
+apache darkstar=NOPASSWD: /usr/local/etc/script/edit_vps
+apache darkstar=NOPASSWD: /usr/bin/sed
+apache darkstar=NOPASSWD: /bin/sh
